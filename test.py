@@ -1,16 +1,10 @@
 import pytest
-from main import make_request, get_nested_values, create_applicant_data
+from main import make_request, get_nested_values, create_applicant_data, find_resume
 from requests import exceptions
+import os
 
-TOKEN = "675b8574770b11611351d9d6ad0caa7053bb49c08b364f28d034a94075b97e5e"
-ACCOUNT_ID = 30
-
-def test_invalid_url():
-    with pytest.raises(exceptions.HTTPError):
-        make_request(
-            url="testpath/1",
-            headers={"Authorization": f"Bearer {TOKEN}"},
-        )
+TOKEN = "ENTER YOUR TOKEN HERE"
+ACCOUNT_ID = 0
 
 def test_getting_nested_values():
     dictionary = {
@@ -77,3 +71,25 @@ def test_create_vaild_applicant():
         json=applicant
     )
     assert created_applicant['code'] == 200
+    
+def test_invalid_url():
+    with pytest.raises(exceptions.HTTPError):
+        make_request(
+            url="testpath/1",
+            headers={"Authorization": f"Bearer {TOKEN}"},
+        )    
+   
+def test_success_find_resume():
+    workdir = "test_task/Тестовая база.xlsx"
+    path = "Frontend-разработчик"
+    name = "Танский Михаил.pdf"
+    resume_path = find_resume(workdir, path, name)
+    assert resume_path is not None
+    assert os.path.isfile(resume_path)
+    
+def test_failed_find_resume():
+    workdir = "test_task/Тестовая база.xlsx"
+    path = "Backend-разработчик"
+    name = "Тест Тестов.doc"
+    resume_path = find_resume(workdir, path, name)
+    assert resume_path is None
