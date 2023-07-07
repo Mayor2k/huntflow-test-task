@@ -3,7 +3,7 @@ from main import make_request, get_nested_values, create_applicant_data, find_re
 from requests import exceptions
 import os
 
-TOKEN = "ENTER YOUR TOKEN HERE"
+TOKEN = "ENTER YOUR TOKEN HERE!"
 ACCOUNT_ID = 0
 
 def test_getting_nested_values():
@@ -31,7 +31,7 @@ def test_getting_nested_values():
     assert get_nested_values(dictionary,["fields","name", "last"]) == "Testov"
     assert get_nested_values(dictionary,["fields","name", "middle"]) is not None
     assert get_nested_values(dictionary,["fields","email"]) == "test@example.com"
-    assert get_nested_values(dictionary,["fields","phones"])[0] == "+123456789"
+    assert get_nested_values(dictionary,["fields","phones"],[""])[0] == "+1234567890"
     assert get_nested_values(dictionary,["fields","experience"],[{}])[0].get("position") == "Python Backend"
     assert get_nested_values(dictionary,["fields","experience"],[{}])[0].get("company") == "Test Company"
     assert get_nested_values(dictionary,["fields","salary"]) is None
